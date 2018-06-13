@@ -2575,6 +2575,9 @@ contains
                    &filter.")
             end if
 
+          case ('ima')
+            t % score_bins(j) = SCORE_IMA
+
           case ('total', '(n,total)')
             t % score_bins(j) = SCORE_TOTAL
             if (t % find_filter(FILTER_ENERGYOUT) > 0) then

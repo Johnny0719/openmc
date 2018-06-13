@@ -50,6 +50,8 @@ contains
       string = "fission-q-prompt"
     case (SCORE_FISS_Q_RECOV)
       string = "fission-q-recoverable"
+    case (SCORE_IMA)
+      string = "ima"
 
     ! Normal ENDF-based reactions
     case (TOTAL_XS)

@@ -54,6 +54,10 @@ module particle_header
     integer          :: cell_instance    ! offset for distributed properties
     type(LocalCoord) :: coord(MAX_COORD) ! coordinates for all levels
 
+    ! Particle coordinates of birth and phantom position
+    real(8)    :: birth_xyz(3)
+    real(8)    :: phantom_xyz(3)
+
     ! Particle coordinates before crossing a surface
     integer :: last_n_coord         ! number of current coordinates
     integer :: last_cell(MAX_COORD) ! coordinates for all levels
@@ -245,6 +249,8 @@ contains
     this % last_wgt         = src % wgt
     this % coord(1) % xyz   = src % xyz
     this % coord(1) % uvw   = src % uvw
+    this % birth_xyz        = src % xyz
+    this % phantom_xyz      = src % xyz
     this % last_xyz_current = src % xyz
     this % last_xyz         = src % xyz
     this % last_uvw         = src % uvw
