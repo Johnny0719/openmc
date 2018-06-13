@@ -183,7 +183,7 @@ Surface::sense(const double xyz[3], const double uvw[3]) const
 }
 
 void
-Surface::reflect(const double xyz[3], double uvw[3]) const
+Surface::reflect(const double xyz[3], double uvw[3], double phantom_xyz[3]) const
 {
   // Determine projection of direction onto normal and squared magnitude of
   // normal.
@@ -196,6 +196,14 @@ Surface::reflect(const double xyz[3], double uvw[3]) const
   uvw[0] -= 2.0 * projection / magnitude * norm[0];
   uvw[1] -= 2.0 * projection / magnitude * norm[1];
   uvw[2] -= 2.0 * projection / magnitude * norm[2];
+
+  // Reflect the phantom position of the particle's birth position.
+  const double d = -(norm[0]*xyz[0] + norm[1]*xyz[1] + norm[2]*xyz[2]);
+  const double D = norm[0]*phantom_xyz[0] + norm[1]*phantom_xyz[1] 
+                   + norm[2]*phantom_xyz[2] + d;
+  phantom_xyz[0] -= 2.0 * D / magnitude * norm[0];
+  phantom_xyz[1] -= 2.0 * D / magnitude * norm[1];
+  phantom_xyz[2] -= 2.0 * D / magnitude * norm[2];
 }
 
 void
@@ -1251,8 +1259,9 @@ extern "C" int surface_bc(Surface *surf) {return surf->bc;}
 extern "C" bool surface_sense(Surface *surf, double xyz[3], double uvw[3])
 {return surf->sense(xyz, uvw);}
 
-extern "C" void surface_reflect(Surface *surf, double xyz[3], double uvw[3])
-{surf->reflect(xyz, uvw);}
+extern "C" void surface_reflect(Surface *surf, double xyz[3], double uvw[3],
+                                double phantom_xyz[3])
+{surf->reflect(xyz, uvw, phantom_xyz);}
 
 extern "C" double
 surface_distance(Surface *surf, double xyz[3], double uvw[3], bool coincident)
