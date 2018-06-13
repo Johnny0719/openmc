@@ -40,13 +40,14 @@ module surface_header
       logical(C_BOOL)                   :: sense
     end function surface_sense_c
 
-    pure subroutine surface_reflect_c(surf_ptr, xyz, uvw) &
+    pure subroutine surface_reflect_c(surf_ptr, xyz, uvw, phantom_xyz) &
          bind(C, name='surface_reflect')
       use ISO_C_BINDING
       implicit none
       type(C_PTR),    intent(in), value :: surf_ptr
       real(C_DOUBLE), intent(in)        :: xyz(3);
       real(C_DOUBLE), intent(inout)     :: uvw(3);
+      real(C_DOUBLE), intent(inout)     :: phantom_xyz(3);
     end subroutine surface_reflect_c
 
     pure function surface_distance_c(surf_ptr, xyz, uvw, coincident) &
@@ -154,11 +155,12 @@ contains
     sense = surface_sense_c(this % ptr, xyz, uvw)
   end function surface_sense
 
-  pure subroutine surface_reflect(this, xyz, uvw)
+  pure subroutine surface_reflect(this, xyz, uvw, phantom_xyz)
     class(Surface), intent(in)    :: this
     real(C_DOUBLE), intent(in)    :: xyz(3);
     real(C_DOUBLE), intent(inout) :: uvw(3);
-    call surface_reflect_c(this % ptr, xyz, uvw)
+    real(C_DOUBLE), intent(inout) :: phantom_xyz(3);
+    call surface_reflect_c(this % ptr, xyz, uvw, phantom_xyz)
   end subroutine surface_reflect
 
   pure function surface_distance(this, xyz, uvw, coincident) result(d)

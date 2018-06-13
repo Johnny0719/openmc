@@ -83,7 +83,7 @@ public:
   //! @param uvw[3] A direction.  This is both an input and an output parameter.
   //!   It specifies the icident direction on input and the reflected direction
   //!   on output.
-  void reflect(const double xyz[3], double uvw[3]) const;
+  void reflect(const double xyz[3], double uvw[3], double phantom_xyz[3]) const;
 
   //! Evaluate the equation describing the surface.
   //!
@@ -387,7 +387,8 @@ extern "C" Surface* surface_pointer(int surf_ind);
 extern "C" int surface_id(Surface *surf);
 extern "C" int surface_bc(Surface *surf);
 extern "C" bool surface_sense(Surface *surf, double xyz[3], double uvw[3]);
-extern "C" void surface_reflect(Surface *surf, double xyz[3], double uvw[3]);
+extern "C" void surface_reflect(Surface *surf, double xyz[3], double uvw[3], 
+                                double phantom_xyz[3]);
 extern "C" double surface_distance(Surface *surf, double xyz[3], double uvw[3],
                                    bool coincident);
 extern "C" void surface_normal(Surface *surf, double xyz[3], double uvw[3]);

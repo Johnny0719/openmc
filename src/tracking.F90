@@ -360,7 +360,7 @@ contains
       end if
 
       ! Reflect particle off surface
-      call surf % reflect(p%coord(1)%xyz, p%coord(1)%uvw)
+      call surf % reflect(p%coord(1)%xyz, p%coord(1)%uvw, p%phantom_xyz)
 
       ! Make sure new particle direction is normalized
       u = p%coord(1)%uvw(1)
