@@ -136,6 +136,12 @@ contains
           score = flux
         end if
 
+      case (SCORE_IMA)
+        ! Currently the tally of incremental migration area only supports
+        ! analog tallies if mesh filters are used. The compatibility with mesh
+        ! filters in track-length tallies will be resolved in following work
+        score = norm2(p % coord(1) % xyz - p % phantom_xyz) ** 2 &
+             - norm2(p % last_xyz - p % phantom_xyz) ** 2
 
       case (SCORE_TOTAL)
         if (t % estimator == ESTIMATOR_ANALOG) then
