@@ -135,7 +135,7 @@ contains
     ! ========================================================================
     ! Figure out which mesh cell to tally.
 
-    ! Copy the un-modified coordinates the particle direction.
+    ! Copy the un-modified coordinates and the particle direction.
     xyz0 = p % last_xyz
     xyz1 = p % coord(1) % xyz
     uvw = p % coord(1) % uvw
