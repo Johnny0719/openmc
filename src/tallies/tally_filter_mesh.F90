@@ -25,6 +25,8 @@ module tally_filter_mesh
 
   type, public, extends(TallyFilter) :: MeshFilter
     integer :: mesh
+    real(8) :: xyz_start_in_mesh(3) ! starting/intermediate coordinates
+    real(8) :: xyz_end_in_mesh(3)   ! starting/intermediate coordinates
   contains
     procedure :: from_xml
     procedure :: get_all_bins => get_all_bins_mesh
