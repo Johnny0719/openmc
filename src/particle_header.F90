@@ -54,13 +54,15 @@ module particle_header
     integer          :: cell_instance    ! offset for distributed properties
     type(LocalCoord) :: coord(MAX_COORD) ! coordinates for all levels
 
-    ! Particle coordinates of birth and phantom position
-    real(8)    :: birth_xyz(3)
-    real(8)    :: phantom_xyz(3)
-
     ! Particle coordinates before crossing a surface
     integer :: last_n_coord         ! number of current coordinates
     integer :: last_cell(MAX_COORD) ! coordinates for all levels
+
+    ! Particle coordinates for computing migration area
+    real(8)    :: birth_xyz(3)    ! coordinates of birth position
+    real(8)    :: phantom_xyz(3)  ! coordinates of phantom position
+    real(8)    :: x_start_in_mesh ! starting x coordinate in the mesh when
+                                  ! mesh filter is used
 
     ! Energy Data
     real(8)    :: E      ! post-collision energy
