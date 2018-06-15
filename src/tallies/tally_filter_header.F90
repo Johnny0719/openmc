@@ -34,8 +34,8 @@ module tally_filter_header
     ! Indicates whether all valid bins for this filter have been found
     logical          :: bins_present = .false.
 
-    ! Special coordinates information need for IMA tally using mesh filters
-    type(VectorReal) :: x_start
+    ! Special x-coordinates information need for IMA tally using mesh filters
+    type(VectorReal) :: x_starts
   end type TallyFilterMatch
 
 !===============================================================================

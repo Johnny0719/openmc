@@ -63,6 +63,7 @@ contains
       if (val /= EMPTY) then
         call match % bins % push_back(val)
         call match % weights % push_back(ONE)
+        call match % x_starts % push_back(ZERO)
       end if
     end do
 

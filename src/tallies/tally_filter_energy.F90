@@ -97,9 +97,11 @@ contains
       if (estimator == ESTIMATOR_TRACKLENGTH) then
         call match % bins % push_back(num_energy_groups - p % g + 1)
         call match % weights % push_back(ONE)
+        call match % x_starts % push_back(ZERO)
       else
         call match % bins % push_back(num_energy_groups - p % last_g + 1)
         call match % weights % push_back(ONE)
+        call match % x_starts % push_back(ZERO)
       end if
 
     else

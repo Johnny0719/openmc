@@ -223,7 +223,7 @@ contains
       call match % weights % push_back(distance / total_distance)
 
       ! Record the starting and ending coordinates of particle in current mesh
-      call match % x_start % push_back(xyz0(1))
+      call match % x_starts % push_back(xyz0(1))
 
       ! Find the next mesh cell that the particle enters.
 
