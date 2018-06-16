@@ -97,11 +97,10 @@ contains
       if (estimator == ESTIMATOR_TRACKLENGTH) then
         call match % bins % push_back(num_energy_groups - p % g + 1)
         call match % weights % push_back(ONE)
-        call match % x_starts % push_back(ZERO)
+        call match % x_starts % push_back(ONE)
       else
         call match % bins % push_back(num_energy_groups - p % last_g + 1)
         call match % weights % push_back(ONE)
-        call match % x_starts % push_back(ZERO)
       end if
 
     else
@@ -113,6 +112,7 @@ contains
       if (bin /= NO_BIN_FOUND) then
         call match % bins % push_back(bin)
         call match % weights % push_back(ONE)
+        call match % x_starts % push_back(ONE)
       end if
     end if
   end subroutine get_all_bins_energy

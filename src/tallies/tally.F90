@@ -99,6 +99,13 @@ contains
     real(8) :: f                    ! interpolation factor
     real(8) :: score                ! analog tally score
     real(8) :: E                    ! particle energy
+    
+    ! Parameters only for IMA tallies with mesh filters
+    real(8) :: total_distance       !
+    real(8) :: mesh_weight          !
+    real(8) :: ratio_satrt          !
+    real(8) :: xyz_start(3)         !
+    real(8) :: xyz_end(3)           !
 
     ! Pre-collision energy of particle
     E = p % last_E
@@ -139,10 +146,18 @@ contains
 
       case (SCORE_IMA)
         ! Currently the tally of incremental migration area only supports
-        ! analog tallies if mesh filters are used. The compatibility with mesh
-        ! filters in track-length tallies will be resolved in following work
+        ! track-length tallies.
         if (t % find_filter(FILTER_MESH) > 0) then
-
+          total_distance = norm2(p % coord(1) % xyz - p % last_xyz)
+          mesh_weight = flux / total_distance
+          ratio_satrt = (p % x_start_in_mesh - p % last_xyz(1)) &
+               / (p % coord(1) % xyz(1) - p % last_xyz(1))
+          xyz_start = p % last_xyz + (p % coord(1) % xyz - p % last_xyz) &
+               * ratio_satrt
+          xyz_end = p % last_xyz + (p % coord(1) % xyz - p % last_xyz) &
+               * (ratio_satrt + mesh_weight)
+          score = norm2(xyz_end - p % phantom_xyz) ** 2 - norm2(xyz_start &
+               - p % phantom_xyz) ** 2
         else
           score = norm2(p % coord(1) % xyz - p % phantom_xyz) ** 2 &
                - norm2(p % last_xyz - p % phantom_xyz) ** 2
@@ -2569,8 +2584,8 @@ contains
 
   subroutine score_tracklength_tally(p, distance)
 
-    type(Particle), intent(in) :: p
-    real(8),        intent(in) :: distance
+    type(Particle), intent(inout) :: p
+    real(8),        intent(in)    :: distance
 
     integer :: i
     integer :: i_tally
@@ -2583,6 +2598,8 @@ contains
     real(8) :: flux                 ! tracklength estimate of flux
     real(8) :: atom_density         ! atom density of single nuclide in atom/b-cm
     real(8) :: filter_weight        ! combined weight of all filters
+    real(8) :: filter_x_start       ! special x information for IMA tally when
+                                    ! mesh filters are used
     logical :: finished             ! found all valid bin combinations
     type(Material),    pointer :: mat
 
@@ -2604,6 +2621,7 @@ contains
         if (.not. filter_matches(i_filt) % bins_present) then
           call filter_matches(i_filt) % bins % clear()
           call filter_matches(i_filt) % weights % clear()
+          call filter_matches(i_filt) % x_starts % clear()
           call filters(i_filt) % obj % get_all_bins(p, t % estimator, &
                filter_matches(i_filt))
           filter_matches(i_filt) % bins_present = .true.
@@ -2625,6 +2643,9 @@ contains
         filter_index = 1
         filter_weight = ONE
 
+        ! Reset starting x coordinate in the mesh
+        filter_x_start = ONE
+
         ! Determine scoring index and weight for this filter combination
         do j = 1, size(t % filter)
           i_filt = t % filter(j)
@@ -2633,7 +2654,15 @@ contains
                data(i_bin) - 1) * t % stride(j)
           filter_weight = filter_weight * filter_matches(i_filt) % weights % &
                data(i_bin)
+          ! Special x information for IMA tally when mesh filters are used
+          if (t % find_filter(FILTER_MESH) > 0) then
+            filter_x_start = filter_x_start * filter_matches(i_filt) % &
+                 x_starts % data(i_bin)
+          end if
         end do
+
+        ! Update particle's starting x coordinate in the mesh
+        p % x_start_in_mesh = filter_x_start
 
         ! ======================================================================
         ! Nuclide logic
