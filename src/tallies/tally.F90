@@ -2103,6 +2103,7 @@ contains
         if (.not. filter_matches(i_filt) % bins_present) then
           call filter_matches(i_filt) % bins % clear()
           call filter_matches(i_filt) % weights % clear()
+          call filter_matches(i_filt) % x_starts % clear()
           call filters(i_filt) % obj % get_all_bins(p, t % estimator, &
                filter_matches(i_filt))
           filter_matches(i_filt) % bins_present = .true.
@@ -2249,6 +2250,7 @@ contains
         if (.not. filter_matches(i_filt) % bins_present) then
           call filter_matches(i_filt) % bins % clear()
           call filter_matches(i_filt) % weights % clear()
+          call filter_matches(i_filt) % x_starts % clear()
           call filters(i_filt) % obj % get_all_bins(p, t % estimator, &
                filter_matches(i_filt))
           filter_matches(i_filt) % bins_present = .true.
@@ -2790,6 +2792,7 @@ contains
         if (.not. filter_matches(i_filt) % bins_present) then
           call filter_matches(i_filt) % bins % clear()
           call filter_matches(i_filt) % weights % clear()
+          call filter_matches(i_filt) % x_starts % clear()
           call filters(i_filt) % obj % get_all_bins(p, t % estimator, &
                filter_matches(i_filt))
           filter_matches(i_filt) % bins_present = .true.
@@ -2936,6 +2939,7 @@ contains
         if (.not. filter_matches(i_filt) % bins_present) then
           call filter_matches(i_filt) % bins % clear()
           call filter_matches(i_filt) % weights % clear()
+          call filter_matches(i_filt) % x_starts % clear()
           call filters(i_filt) % obj % get_all_bins(p, t % estimator, &
                filter_matches(i_filt))
           filter_matches(i_filt) % bins_present = .true.
